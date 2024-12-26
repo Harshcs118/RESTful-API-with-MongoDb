@@ -1,19 +1,24 @@
-### 1. GET /users
-![Status Code: 200 OK](./Screenshots/Screenshot%20(62).png)
+### 1. GET /api/users
+Description: Fetch all users
+![ThunderClient](./Screenshots/Screenshot%20(73).png)
+![MongoDb compass](./Screenshots/Screenshot%20(74).png)
 
-### 2. GET /users/:id
-![Status Codes: 200 OK (User found)](./Screenshots/Screenshot%20(63).png)
-![Status Codes: 404 Not Found (User not found)](./Screenshots/Screenshot%20(64).png)
+### 2. POST /api/user
+Description: Add a new user.
+![ThunderClient](./Screenshots/Screenshot%20(75).png)
+![MongoDb compass](./Screenshots/Screenshot%20(76).png)
 
-### 3. POST /users
-![Status Codes: 201 Created (User added successfully)](./Screenshots/Screenshot%20(65).png)
-![Status Codes: 400 Bad Request (Validation error)](./Screenshots/Screenshot%20(66).png)
+### 3. GET /api/users/:id
+Description: Fetch a user by their ID.
+![ThunderClient](./Screenshots/Screenshot%20(77).png)
+![MongoDb compass](./Screenshots/Screenshot%20(78).png)
 
-### 4. PUT /users/:id
-![Status Codes: 200 OK (User updated successfully)](./Screenshots/Screenshot%20(67).png)
-![Status Codes: 404 Not Found (User not found)](./Screenshots/Screenshot%20(68).png)
-![Status Codes: 400 Bad Request (Validation error)](./Screenshots/Screenshot%20(69).png)
+### 4. PUT /api/user/:id
+Description: Update an existing user.
+![ThunderClient](./Screenshots/Screenshot%20(79).png)
+![MongoDb compass](./Screenshots/Screenshot%20(80).png)
 
-### 5. DELETE /users/:id
-![Status Codes: 200 OK (User deleted successfully)](./Screenshots/Screenshot%20(70).png)
-![Status Codes: 404 Not Found (User not found)](./Screenshots/Screenshot%20(71).png)
+### 5. DELETE /api/user/:id
+Description: Delete a user by their ID
+![ThunderClient](./Screenshots/Screenshot%20(81).png)
+![MongoDb compass](./Screenshots/Screenshot%20(82).png)

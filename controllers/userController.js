@@ -1,76 +1,75 @@
-// Import the users data from the in-memory data source
-const users = require('../data/users');
+// Import the User model
+const User = require('../models/user');
 
 // Fetch all users
-exports.getUsers = (req, res) => {
-  // Respond with a 200 status code and the list of users in JSON format
-  res.status(200).json(users);
+exports.getAllUsers = async (req, res) => {
+    try {
+        // Retrieve all users from the database
+        const users = await User.find();
+        // Respond with a 200 status code and the list of users in JSON format
+        res.status(200).json(users);
+    } catch (error) {
+        // If an error occurs, respond with a 500 status code and an error message
+        res.status(500).json({ message: 'Error fetching users', error });
+    }
 };
 
 // Fetch user by ID
-exports.getUserById = (req, res) => {
-  // Find the user with the specified ID from the request parameters
-  const user = users.find(u => u.id === req.params.id);
-  
-  // If the user is not found, respond with a 404 status code and an error message
-  if (!user) {
-    return res.status(404).json({ error: 'User  not found' });
-  }
-  
-  // If the user is found, respond with a 200 status code and the user data in JSON format
-  res.status(200).json(user);
+exports.getUserById = async (req, res) => {
+    try {
+        // Retrieve a user by ID from the database
+        const user = await User.findById(req.params.id);
+        // If the user is not found, respond with a 404 status code and an error message
+        if (!user) return res.status(404).json({ message: 'User  not found' });
+        // Respond with a 200 status code and the user data in JSON format
+        res.status(200).json(user);
+    } catch (error) {
+        // If an error occurs, respond with a 500 status code and an error message
+        res.status(500).json({ message: 'Error fetching user', error });
+    }
 };
 
 // Add a new user
-exports.addUser  = (req, res) => {
-  // Destructure the firstName, lastName, and hobby from the request body
-  const { firstName, lastName, hobby } = req.body;
-  
-  // Create a new user object with a unique ID and the provided data
-  const newUser  = { id: `${users.length + 1}`, firstName, lastName, hobby };
-  
-  // Add the new user to the users array
-  users.push(newUser );
-  
-  // Respond with a 201 status code and the newly created user in JSON format
-  res.status(201).json(newUser );
+exports.addUser  = async (req, res) => {
+    try {
+        // Create a new user instance with the data from the request body
+        const newUser  = new User(req.body);
+        // Save the new user to the database
+        await newUser .save();
+        // Respond with a 201 status code and a success message along with the new user data
+        res.status(201).json({ message: 'User  added successfully', user: newUser  });
+    } catch (error) {
+        // If an error occurs (e.g., validation error), respond with a 400 status code and an error message
+        res.status(400).json({ message: 'Error adding user', error });
+    }
 };
 
-// Update a user
-exports.updateUser  = (req, res) => {
-  // Find the user with the specified ID from the request parameters
-  const user = users.find(u => u.id === req.params.id);
-  
-  // If the user is not found, respond with a 404 status code and an error message
-  if (!user) {
-    return res.status(404).json({ error: 'User  not found' });
-  }
-  
-  // Destructure the updated data from the request body
-  const { firstName, lastName, hobby } = req.body;
-  
-  // Update the user's properties with the new data
-  user.firstName = firstName;
-  user.lastName = lastName;
-  user.hobby = hobby;
-  
-  // Respond with a 200 status code and the updated user data in JSON format
-  res.status(200).json(user);
+// Update user by ID
+exports.updateUser  = async (req, res) => {
+    try {
+        // Update the user by ID with the data from the request body
+        const updatedUser  = await User.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
+        // If the user is not found, respond with a 404 status code and an error message
+        if (!updatedUser ) return res.status(404).json({ message: 'User  not found' });
+        // Respond with a 200 status code and a success message along with the updated user data
+        res.status(200).json({ message: 'User  updated successfully', user: updatedUser  });
+    } catch (error) {
+        // If an error occurs (e.g., validation error), respond with a 400 status code and an error message
+        res.status(400).json({ message: 'Error updating user', error });
+    }
 };
 
-// Delete a user
-exports.deleteUser  = (req, res) => {
-  // Find the index of the user with the specified ID from the request parameters
-  const index = users.findIndex(u => u.id === req.params.id);
-  
-  // If the user is not found, respond with a 404 status code and an error message
-  if (index === -1) {
-    return res.status(404).json({ error: 'User  not found' });
-  }
-  
-  // Remove the user from the users array
-  users.splice(index, 1);
-  
-  // Respond with a 200 status code and a success message
-  res.status(200).json({ message: 'User  deleted successfully' });
+// Delete user by ID
+exports.deleteUser  = async (req, res) => {
+    try {
+        // Delete the user by ID from the database
+        const deletedUser  = await User.findByIdAndDelete(req.params.id);
+        // If the user is not found, respond with a 404 status code and an error message
+        if (!deletedUser ) return res.status(404).json({ message: 'User  not found' });
+        // Respond with a 200 status code and a success message
+        res.status(200).json({ message: 'User  deleted successfully' });
+    } catch (error) {
+        // If an error occurs, respond with a 500 status code and an error message
+        res.status(500).json({ message: 'Error deleting user', error });
+    }
 };
